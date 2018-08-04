@@ -49,15 +49,15 @@ Shader "custom/light model/normal map in tangent space"{
 			 	v2f o;
 			 	o.pos = UnityObjectToClipPos(v.vertex);
 
-			 	o.uv.xy = texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
-			 	o.uv.zw = texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
-
+			 	o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+			 	o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+ 
 			 	float3 binormal = cross(normalize(v.normal), normalize(v.tangent.xyz)) * v.tangent.w;
 			 	float3x3 rotation = float3x3(v.tangent.xyz, binormal, v.normal);
 			 	// 或者直接使用TANGENT_SPACE_ROTATION;
 
-			 	v.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex)).xyz;
-			 	v.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex)).xyz;
+			 	o.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex)).xyz;
+			 	o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex)).xyz;
 
 			 	return o;
 			 }
@@ -67,20 +67,18 @@ Shader "custom/light model/normal map in tangent space"{
 			 	fixed3 tangentViewDir = normalize(i.viewDir);
 
 			 	fixed4 packedNormal = tex2D(_BumpMap, i.uv.zw);
+				fixed3 tangentNormal = UnpackNormal(packedNormal);
+				tangentNormal.xy *= _BumpScale;
+				tangentNormal.z = sqrt(1.0-saturate(dot(tangentNormal.xy, tangentNormal.xy)));
 
 			 	fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
 
 			 	fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
 
-			 	fixed3 worldNormal = normalize(i.world_normal);
-			 	fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
-			 	fixed3 diffuse =_LightColor0.rgb * albedo.rgb * saturate(dot(worldLightDir, worldNormal));
+			 	fixed3 diffuse =_LightColor0.rgb * albedo.rgb * saturate(dot(tangentNormal, i.lightDir));
 
-			 	fixed3 diffuse = _LightColor0.rgb * albedo.rgb * saturate(dot(i.lightDir, ))
-
-			 	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.world_pos.xyz);
-			 	fixed3 halfDir = normalize(viewDir + worldLightDir);
-			 	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(halfDir, worldNormal)), _Gloss);
+			 	fixed3 halfDir = normalize(i.viewDir + i.lightDir);
+			 	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(halfDir, tangentNormal)), _Gloss);
 			 	
 			 	fixed3 color = ambient + diffuse + specular;
 
