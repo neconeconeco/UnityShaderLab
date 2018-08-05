@@ -1,6 +1,6 @@
 ﻿// 单张凹凸纹理贴图
 
-Shader "custom/light model/normal map in tangent space"{
+Shader "custom/texture/normal map in tangent space"{
 	Properties {
 		_Color("Diffuse", Color) = (1, 1, 1, 1)
 		_MainTex("Main Tex", 2D) = "white"{}
@@ -89,5 +89,5 @@ Shader "custom/light model/normal map in tangent space"{
 		}
 	}
 
-	FallBack "Diffuse"
+	FallBack "Specular"
 }

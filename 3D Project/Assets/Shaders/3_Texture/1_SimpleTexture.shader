@@ -1,6 +1,6 @@
 ﻿// 单张纹理贴图
 
-Shader "custom/light model/simple texture"{
+Shader "custom/texture/simple texture"{
 	Properties {
 		_Color("Diffuse", Color) = (1, 1, 1, 1)
 		_MainTex("Main Tex", 2D) = "white"{}
