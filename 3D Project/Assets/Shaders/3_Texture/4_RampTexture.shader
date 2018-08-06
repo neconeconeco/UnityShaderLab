@@ -1,10 +1,12 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
 Shader "custom/texture/ramp texture"
 {
 	Properties{
-        _Colot("Colot Tint", Color) = (1, 1, 1, 1)
+        _Color("Colot Tint", Color) = (1, 1, 1, 1)
         _RampTex("Ramp Tex", 2D) = "white"{}
         _Specular("Specular", Color) = (1, 1, 1, 1)
         _Gloss("Gloss", Range(8.0, 256)) = 20.0
@@ -45,7 +47,7 @@ Shader "custom/texture/ramp texture"
                 o.pos = UnityObjectToClipPos(v.vertex);
 
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 
                 o.uv = TRANSFORM_TEX(v.texcoord, _RampTex);
 
