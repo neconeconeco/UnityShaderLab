@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: transparent_texture
-  m_Shader: {fileID: 4800000, guid: 8fe3bbec8344c2341bd5f06925b14a70, type: 3}
+  m_Shader: {fileID: 4800000, guid: 381b4eaa6a7d52048b36485196880cb3, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
